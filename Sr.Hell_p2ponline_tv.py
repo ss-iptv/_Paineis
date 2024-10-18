@@ -111,15 +111,19 @@ def listar_arquivos_combo():
     print("Arquivos disponíveis:")
     for i, arquivo in enumerate(arquivos, 1):
         print(f"{i}. {arquivo}")
-    while True:
-        try:
-            srhell = int(input("Escolha o número do arquivo: ")) - 1
-            if 0 <= srhell < len(arquivos):
-                return os.path.join(diretorio, arquivos[srhell])
-            else:
-                print("Escolha inválida. Tente novamente.")
-        except ValueError:
-            print("Por favor, insira um número válido.")
+    
+    # Escolha automática do primeiro arquivo
+    if arquivos:
+        srhell = 0  # Índice do primeiro arquivo
+        return os.path.join(diretorio, arquivos[srhell])
+    else:
+        print("Nenhum arquivo .txt encontrado na pasta.")
+        return None
+
+# Exemplo de uso
+caminho_arquivo = listar_arquivos_combo()
+if caminho_arquivo:
+    print(f"Arquivo selecionado: {caminho_arquivo}")
 
 def process_account(user, password, i, total):
     print(f"Verificando {i}/{total}", end="\r")
