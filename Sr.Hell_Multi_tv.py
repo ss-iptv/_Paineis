@@ -175,7 +175,7 @@ def main():
             #        "https://versatplay.cmsz.site"
     ]
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = []
         for i, linha in enumerate(linhas, 1):
             try:
