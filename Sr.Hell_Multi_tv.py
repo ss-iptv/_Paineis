@@ -154,7 +154,7 @@ def main():
         "https://p2ponline.brtv.me",
         "https://csnow.brtv.me",        
         "https://wolf.brtv.me",
-        "https://one.cmsz.site"
+        "https://onetv.cmzi.top/"
         "https://inovaplay.cmsz.site"
     ]
 
