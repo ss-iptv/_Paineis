@@ -189,7 +189,7 @@ def main():
             if future.result():
                 validos += 1
 
-            if len(futures) % 100 == 0:
+            if len(futures) % 400 == 0:
                 print(AZUL + "\nPausando por 0.1 segundos para evitar banimento..." + RESET)
                 time.sleep(0.1)
 
