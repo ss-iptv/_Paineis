@@ -190,8 +190,8 @@ def main():
                 validos += 1
 
             if len(futures) % 400 == 0:
-                print(AZUL + "\nPausando por 0.1 segundos para evitar banimento..." + RESET)
-                time.sleep(0.1)
+                print(AZUL + "\nPausando por 0.5 segundos para evitar banimento..." + RESET)
+                time.sleep(0.0)
 
     print(f"\nTotal de válidos: {validos}/{total}\n")
 
