@@ -49,12 +49,14 @@ def get_terminal_size():
 
 def create_ascii_art():
     ascii_art = """
-<code base/>
-<atk painel onetv/>
-•••••••••</>•••••••••
-<algoritm by Sr. Hell/>
-    """
+  +-+-+-+-+ |M|o|d|.| |A|r|u|j|a| +-+-+-+-+
+
+
+  +-+-+-+-+-+ |SR|.| |H|E|L|L| +-+-+-+-+ 
+  
+      """
     return ascii_art
+
 
 def center_text(text, width):
     return "\n".join(line.center(width) for line in text.splitlines())
@@ -189,7 +191,7 @@ def main():
 
             if len(futures) % 100 == 0:
                 print(AZUL + "\nPausando por 0.5 segundos para evitar banimento..." + RESET)
-                time.sleep(0.5)
+                time.sleep(0.1)
 
     print(f"\nTotal de válidos: {validos}/{total}\n")
 
