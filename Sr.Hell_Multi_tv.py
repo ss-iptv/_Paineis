@@ -151,7 +151,8 @@ def main():
     urls = [
         "https://stone.cmsz.site",
         "https://office.brtv.me",
-        "https://wolf.cmsz.site",
+        "https://csnow.brtv.me",        
+        "https://wolf.brtv.me",
         "https://one.cmsz.site"
     ]
 
