@@ -112,21 +112,28 @@ def process_account(username, password, i, total, base_url):
         print(VERMELHO + f"\nLogin inválido: {username}:{password}" + RESET)
         return False
 
+import os
+
 def listar_arquivos_combo():
     diretorio = "/content/drive/MyDrive/_Paineis/combo"
     arquivos = [f for f in os.listdir(diretorio) if f.endswith('.txt')]
+    
     print("Arquivos disponíveis:")
     for i, arquivo in enumerate(arquivos, 1):
         print(f"{i}. {arquivo}")
     
-    # Escolha automática do primeiro arquivo
+    # Escolha automática de todos os arquivos
     if arquivos:
-        srhell = 0  # Índice do primeiro arquivo
-        return os.path.join(diretorio, arquivos[srhell])
+        caminhos = [os.path.join(diretorio, arquivo) for arquivo in arquivos]
+        return caminhos  # Retorna uma lista com os caminhos de todos os arquivos
     else:
         print("Nenhum arquivo .txt encontrado na pasta.")
         return None
 
+# Exemplo de uso
+caminhos_dos_arquivos = listar_arquivos_combo()
+if caminhos_dos_arquivos:
+    print("Caminhos dos arquivos selecionados:", caminhos_dos_arquivos)
 def main():
     clear_screen()
     terminal_size = get_terminal_size()
