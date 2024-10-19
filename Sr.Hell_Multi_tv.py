@@ -112,18 +112,20 @@ def process_account(username, password, i, total, base_url):
         print(VERMELHO + f"\nLogin inválido: {username}:{password}" + RESET)
         return False
 
-def main():
-    caminhos_dos_arquivos = listar_arquivos_combo()
+def listar_arquivos_combo():
+    diretorio = "/content/drive/MyDrive/_Paineis/combo"
+    arquivos = [f for f in os.listdir(diretorio) if f.endswith('.txt')]
+    print("Arquivos disponíveis:")
+    for i, arquivo in enumerate(arquivos, 1):
+        print(f"{i}. {arquivo}")
     
-    if caminhos_dos_arquivos:
-        for arquivo_combo in caminhos_dos_arquivos:
-            with open(arquivo_combo, 'r') as file:
-                # Processar o conteúdo do arquivo
-                conteudo = file.read()
-                print(f"Conteúdo do arquivo {arquivo_combo}:")
-                print(conteudo)
+    # Escolha automática do primeiro arquivo
+    if arquivos:
+        srhell = 0  # Índice do primeiro arquivo
+        return os.path.join(diretorio, arquivos[srhell])
     else:
-        print("Nenhum arquivo para processar.")
+        print("Nenhum arquivo .txt encontrado na pasta.")
+        return None
 
 def main():
     clear_screen()
