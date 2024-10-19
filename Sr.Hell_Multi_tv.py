@@ -154,9 +154,9 @@ def main():
         "https://p2ponline.brtv.me",
         "https://csnow.brtv.me",        
         "https://wolf.brtv.me",
-        "https://onetv.cmzi.top"
-        "https://inovaplay.cmsz.site"
-        "https://touroboxv4.brtv.uno"
+        "https://onetv.cmzi.top",
+        "https://inovaplay.cmsz.site",
+        "https://touroboxv4.brtv.uno",
     ]
 
     with ThreadPoolExecutor(max_workers=5) as executor:
