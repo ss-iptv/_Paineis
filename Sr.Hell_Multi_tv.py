@@ -151,9 +151,11 @@ def main():
     urls = [
         "https://stone.cmsz.site",
         "https://office.brtv.me",
+        "https://p2ponline.brtv.me",
         "https://csnow.brtv.me",        
         "https://wolf.brtv.me",
         "https://one.cmsz.site"
+        "https://inovaplay.cmsz.site"
     ]
 
     with ThreadPoolExecutor(max_workers=5) as executor:
