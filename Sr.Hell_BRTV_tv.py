@@ -159,7 +159,7 @@ def main():
 
     print(f"\nVerificando {total} contas...\n")
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=9) as executor:
         futures = []
         for i, linha in enumerate(linhas, 1):
             try:
