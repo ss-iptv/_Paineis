@@ -149,15 +149,28 @@ def main():
 
     # Lista de URLs a serem verificadas
     urls = [
-        "https://stone.cmsz.site",
-        "https://panel.cmsz.site",
-        "https://versatplay.cmsz.site",
-        "https://office.brtv.me",
+#   PAINEIS BRTV     
         "https://p2ponline.brtv.me",
-        "https://csnow.brtv.me",        
-#        "https://wolf.brtv.me",
+        "https://csnow.brtv.me",
+        "https://csnow.brtv.me",
+            #        "https://wolf.brtv.me",
+    
+#   PAINEIS CMSI.TOP    
         "https://onetv.cmzi.top",
-        "https://inovaplay.cmsz.site"
+        
+ #   PAINEIS HIGHTV    
+        "https://greentv.cmsz.site",
+        "https://hightv.cmsz.site",  
+        
+        
+#   PAINEIS CMSZ.SITE    
+        "https://inovaplay.cmsz.site",
+        "https://adlt.cmsz.site",
+        "https://tecdesv.cmsz.site",
+        "https://panel.cmsz.site",
+        "https://panel.cmsz.site",
+        "https://panel.cmsz.site",
+            #        "https://versatplay.cmsz.site"
     ]
 
     with ThreadPoolExecutor(max_workers=5) as executor:
