@@ -150,13 +150,14 @@ def main():
     # Lista de URLs a serem verificadas
     urls = [
         "https://stone.cmsz.site",
+        "https://panel.cmsz.site",
+        "https://versatplay.cmsz.site/",
         "https://office.brtv.me",
         "https://p2ponline.brtv.me",
         "https://csnow.brtv.me",        
-        "https://wolf.brtv.me",
+#        "https://wolf.brtv.me",
         "https://onetv.cmzi.top",
-        "https://inovaplay.cmsz.site",
-        "https://touroboxv4.brtv.uno"
+        "https://inovaplay.cmsz.site"
     ]
 
     with ThreadPoolExecutor(max_workers=5) as executor:
