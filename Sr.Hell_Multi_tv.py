@@ -102,7 +102,7 @@ def process_account(username, password, i, total, base_url):
     name, credits, base_url = login_and_get_dashboard(username, password, base_url)
 
     if name is not None:
-            print(VERDE + f"\n==[ Login válido ]==\n • User: {username}\n • Pass: {password}" + RESET)
+        print(VERDE + f"\n==[ Login válido ]==\n • User: {username}\n • Pass: {password}" + RESET)
         print(f" ===<use infos/>===\n • Nome: {name}")
         print(f" • Créditos: {credits}")
         with open("/content/drive/MyDrive/_Paineis/combo/hits/one_tv_hits.txt", "a") as hit_file:
