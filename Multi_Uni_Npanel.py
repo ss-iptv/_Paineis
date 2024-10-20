@@ -1,5 +1,3 @@
-Modified Panel Checker Script
-
 import requests
 import re
 import sys
