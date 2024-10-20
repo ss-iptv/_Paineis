@@ -45,7 +45,7 @@ time.sleep(0.5)
 # Função para salvar os resultados em um arquivo
 def save_results(username, password, activation_date_str, remaining_days, limit_count, cpf, contract_description, devices, name, signature, status):
     # Define o caminho do diretório e do arquivo
-    directory = "/sdcard/Hits/"
+    directory = "/content/drive/MyDrive/_Paineis/hits/"
     filename = "Logins-ClaroTv.txt"
     
     # Cria o diretório se não existir
@@ -79,7 +79,7 @@ def save_results(username, password, activation_date_str, remaining_days, limit_
 def select_and_process_combos():
     clear()  # Limpa a tela
     banner()  # Exibe o banner    
-    combo_directory = "/storage/emulated/0/Combo/"
+    combo_directory = "/content/drive/MyDrive/_Paineis/combo_email/"
     
     # Verifica se o diretório existe
     if not os.path.exists(combo_directory):
