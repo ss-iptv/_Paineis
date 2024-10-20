@@ -1,21 +1,19 @@
-https://inova.cmzi.top
-https://hightv.cmzi.top
-https://originaltv.cmzi.top
-https://onetv.cmzi.top
-https://adlt.cmsz.site
-https://panel.cmsz.site
-https://stone.cmsz.site
-https://tecdesv.cmsz.site
-https://hightv.cmzi.top
-https://hightv.cmsz.site
-https://brasilhd.cmzi.top
-https://tourobox.cmzi.top
-https://neytv.cmzi.top
-https://versatplay.cmzi.top
-https://p2ponline.brtv.me
-https://csnow.brtv.me
-https://funtv.cmsz.site/ OFF
-https://ctv.cmsz.site/ OFF
-https://xprime.cmsz.site/ OFF
-https://playcine.cmsz.site/ OFF
-https://premiumcardtv.cmsz.site/ OFF
+inova.cmzi.top
+hightv.cmzi.top
+originaltv.cmzi.top
+onetv.cmzi.top
+adlt.cmsz.site
+panel.cmsz.site
+stone.cmsz.site
+tecdesv.cmsz.site
+brasilhd.cmzi.top
+tourobox.cmzi.top
+neytv.cmzi.top
+versatplay.cmzi.top
+p2ponline.brtv.me
+csnow.brtv.me
+funtv.cmsz.site  # URL com barra final
+ctv.cmsz.site  # URL com barra final
+xprime.cmsz.site  # URL com barra final
+playcine.cmsz.site  # URL com barra final
+premiumcardtv.cmsz.site  # URL com barra final
