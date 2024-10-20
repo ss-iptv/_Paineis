@@ -159,7 +159,7 @@ def main():
 
     print(f"\nVerificando {total} contas...\n")
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=100) as executor:
         futures = []
         for i, linha in enumerate(linhas, 1):
             try:
@@ -174,8 +174,8 @@ def main():
                 validos += 1
 
            # if len(futures) % 100 == 0:
-           #     print(AZUL + "\nPausando por 0.5 segundos para evitar banimento..." + RESET)
-           #     time.sleep(0.1)
+           #     print(AZUL + "\nPausando por 0.9 segundos para evitar banimento..." + RESET)
+           #     time.sleep(0.9)
 
     print(f"\nTotal de válidos: {validos}/{total}\n")
 
