@@ -175,7 +175,7 @@ def main():
 
             if len(futures) % 100 == 0:
                 print(AZUL + "\nPausando por 0.5 segundos para evitar banimento..." + RESET)
-                time.sleep(0.1)
+                time.sleep(0.5)
 
     print(f"\nTotal de válidos: {validos}/{total}\n")
 
