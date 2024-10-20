@@ -10,7 +10,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from colorama import Fore, Style
 
 # Configurações globais
-THREADS_PER_SITE = 7  # 7 threads por site
+THREADS_PER_SITE = 5  # 5 threads por site
 SIMULTANEOUS_SITES = 2  # 2 sites simultâneos
 
 # Configuração para evitar warnings de SSL
