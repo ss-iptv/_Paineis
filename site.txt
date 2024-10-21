@@ -2,7 +2,6 @@ painel.nitrohd.site
 inova.cmzi.top
 hightv.cmzi.top
 originaltv.cmzi.top
-onetv.cmzi.top
 adlt.cmsz.site
 panel.cmsz.site
 stone.cmsz.site
@@ -11,6 +10,7 @@ brasilhd.cmzi.top
 tourobox.cmzi.top
 neytv.cmzi.top
 versatplay.cmzi.top
+onetv.cmzi.top
 p2ponline.brtv.me
 csnow.brtv.me
 funtv.cmsz.site  # URL com barra final
