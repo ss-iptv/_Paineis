@@ -8,14 +8,15 @@ panel.cmsz.site
 stone.cmsz.site
 tecdesv.cmsz.site
 brasilhd.cmzi.top
+greentv.cmsz.site
 tourobox.cmzi.top
 neytv.cmzi.top
 versatplay.cmzi.top
 onetv.cmzi.top
 p2ponline.brtv.me
 csnow.brtv.me
-funtv.cmsz.site  # URL com barra final
-ctv.cmsz.site  # URL com barra final
-xprime.cmsz.site  # URL com barra final
-playcine.cmsz.site  # URL com barra final
-premiumcardtv.cmsz.site  # URL com barra final
+funtv.cmsz.site
+ctv.cmsz.site
+xprime.cmsz.site
+playcine.cmsz.site
+premiumcardtv.cmsz.site
