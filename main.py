@@ -9,6 +9,7 @@ import logging
 from configparser import ConfigParser
 from colorama import Fore
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from urllib3.exceptions import InsecureRequestWarning
 
 # Carregar configurações do arquivo .ini
 config = ConfigParser()
