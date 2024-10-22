@@ -96,10 +96,14 @@ def save_data(nhost, user, password, credits, email, registration_date, twofa, w
     os.makedirs(base_path, exist_ok=True)
 
     with open(f"{base_path}/Sr.Hell@{nhost}.txt", "a") as f:
+        f.write(f"\n╼╾ Sr. Hell ╼╾\n")
+        f.write(f"╼╾ Universal 𝐏𝐚𝐢𝐧𝐞𝐥 ╼╾\n")
         f.write(f"𝐔𝐒𝐄𝐑: {user}\n")
         f.write(f"𝐏𝐀𝐒𝐒: {password}\n")
         f.write(f"╼╾ 𝐢𝐧𝐟𝐨 ╼╾\n")
         f.write(f"𝐂𝐑𝐄𝐃𝐈𝐓𝐎𝐒: {credits}\n")
+        f.write(f"╼╼╼╼╼╼╼╼╼╼╼\n")
+        f.write(f"╼ˢᶜʳⁱᵖᵗ ᵇʸ ˢʳ ᴴᵉˡˡ╾\n")
 
     with open(f"{base_path}/Sr.Hell@COMBO(U&P).txt", "a") as f:
         f.write(f"{user}:{password}\n")
