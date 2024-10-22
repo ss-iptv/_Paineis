@@ -79,7 +79,7 @@ def save_results(username, password, activation_date_str, remaining_days, limit_
 def select_and_process_combos():
     clear()  # Limpa a tela
     banner()  # Exibe o banner    
-    combo_directory = "/content/drive/MyDrive/_Paineis/combo_emailclaro/"
+    combo_directory = "/content/drive/MyDrive/_Paineis/combo/combo_claro/"
     
     # Verifica se o diretório existe
     if not os.path.exists(combo_directory):
