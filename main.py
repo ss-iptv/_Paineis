@@ -135,4 +135,4 @@ def main():
         print(f"{Fore.RED}Erro ao processar o arquivo de combo: {str(e)}")
 
 if __name__ == "__main__":
-    main()    
+    main()
