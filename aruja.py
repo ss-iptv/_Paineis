@@ -37,7 +37,7 @@ else:
     sys.stdout.write(f'\033]2;{NOME}\007')
 
 ascii_art = """\033[93m
-noneee                                              
+Sr,HELL - ARUJA MOD                                             
 """
 
 def get_first_combo_file():
