@@ -169,7 +169,11 @@ def manage_sites(sites, combos_data):
 
 def main():
     print(ascii_art)
-    
+ ascii_art = """
+SR HELL
+"""
+
+print(ascii_art)   
     sites = read_sites()
     if not sites:
         print(f"{Fore.RED}Nenhum site encontrado para verificar!")
