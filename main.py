@@ -169,8 +169,12 @@ def manage_sites(sites, combos_data):
 
 def main():
     print(ascii_art)
- ascii_art = """
-SR HELL
+ascii_art = """\033[93m
+   _  _____  ___   _  ________     __  ___  __
+  / |/ / _ \/ _ | / |/ / __/ /    / / / / |/ /
+ /    / ___/ __ |/    / _// /__  / /_/ /    / 
+/_/|_/_/  /_/ |_/_/|_/___/____/  \____/_/|_/  
+                                              
 """
 
 print(ascii_art)   
