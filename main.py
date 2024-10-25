@@ -84,17 +84,17 @@ def print_valid_login(nhost, user, password, credits):
     print(Fore.GREEN + f"╼ˢᶜʳⁱᵖᵗ ᵇʸ ˢʳ ᴴᵉˡˡ╾" + Style.RESET_ALL)
 
 def worker(combo_queue, nhost):
-    while True:
-        try:
-            combo = combo_queue.get_nowait()
-            user, password = combo.strip().split(':')
-            thread_login(nhost, user, password)
-        except queue.Empty:
-            break
-        except ValueError:
-            continue
-        finally:
-            combo_queue.task_done()
+  while True:
+    try:
+      combo = combo_queue.get_nowait()
+      user, password = combo.strip().split(':')
+      thread_login(nhost, user, password)
+    except queue.Empty:
+      break
+    except ValueError:
+      continue
+    finally:
+      combo_queue.task_done()
 
 def process_site(nhost, combos_data):
     print(f"{Fore.CYAN}Iniciando verificação do site: {nhost}")
