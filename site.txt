@@ -36,7 +36,6 @@ painel.np2t.top
 painel.mundotv.io
 az.brtv.me
 painel.onetv1.tv
-onetv.cmsi.site
 gtvplay.online
 green.cmzi.top
 brasilhd.cmzi.top
@@ -89,3 +88,4 @@ ssdevoffice.stv.sx
 londrinahdtv.brpanel.top
 zpainel.site
 originaltv.cmzi.top
+onetv.cmsi.site
