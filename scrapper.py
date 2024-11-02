@@ -12,7 +12,7 @@ from colorama import Fore, Style
 
 # Configurações globais
 THREADS_PER_SITE = 1
-SIMULTANEOUS_SITES = 88
+SIMULTANEOUS_SITES = 70
 COMBO_GENERATION_INTERVAL = 3600  # Gerar novo combo a cada 1 hora
 
 # Configuração para evitar warnings de SSL
