@@ -14,6 +14,7 @@ genesisplus.brtv.uno
 painelinova.brtv.uno
 xvellon.brtv.uno
 touroboxv4.brtv.uno
+tourobox.cmzi.top
 vejatv.brtv.uno
 gplay.brtv.uno
 jctv.brtv.uno
@@ -40,7 +41,6 @@ gtvplay.online
 green.cmzi.top
 brasilhd.cmzi.top
 inova.cmzi.top
-tourobox.cmzi.top
 neytv.cmzi.top
 versatplay.cmzi.top
 funtv.cmzi.top
@@ -75,7 +75,6 @@ chipnews.brtv.me
 tvx.brtv.me
 topiptv.brtv.me
 centralplay.brtv.me
-p2ponline.brtv.me
 cineflix.brtv.me
 painel.stv.sx
 demopainel.phdtv.site
