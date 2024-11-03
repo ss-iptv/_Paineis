@@ -18,7 +18,7 @@ init()
 
 # Global settings
 THREADS_PER_SITE = 5
-SIMULTANEOUS_SITES = 100
+SIMULTANEOUS_SITES = 50
 BATCH_SIZE = 1000 # Logins per batch
 
 # SSL Configuration
