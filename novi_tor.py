@@ -17,7 +17,7 @@ from stem.control import Controller
 init()
 
 # Global settings
-THREADS_PER_SITE = 2
+THREADS_PER_SITE = 3
 SIMULTANEOUS_SITES = 98
 BATCH_SIZE = 500 # Logins per batch
 
