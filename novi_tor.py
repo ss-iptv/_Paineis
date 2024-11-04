@@ -18,8 +18,8 @@ init()
 
 # Global settings
 THREADS_PER_SITE = 2
-SIMULTANEOUS_SITES = 98
-BATCH_SIZE = 200 # Logins per batch
+SIMULTANEOUS_SITES = 80
+BATCH_SIZE = 100 # Logins per batch
 
 # SSL Configuration
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = "TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384"
