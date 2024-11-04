@@ -19,9 +19,9 @@ import random
 init()
 
 # Global settings
-THREADS_PER_SITE = 5
+THREADS_PER_SITE = 2
 SIMULTANEOUS_SITES = 80
-BATCH_SIZE = 1000 # Logins per batch
+BATCH_SIZE = 100 # Logins per batch
 
 # SSL Configuration
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = "TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384"
@@ -230,19 +230,17 @@ def process_site(nhost, login_generator, checker):
 
 def main():
     ascii_art = r"""\033[93m
- _ _____ ___ _ ________ __ ___ __
- / 
-/ / _ \/ _ 
- / 
-/ / __/ / / / / / 
-/ /
- / / ___/ __ 
-/ / _// /__ / /_/ / / 
-/_/
-_/_/ /_/ 
-_/_/
-_/___/____/ \____/_/
-_/ 
+𝔏𝔦𝔤𝔥𝔱
+!      )                    (                       
+!   ( /(     (  (           )\ )            )    )  
+!   )\())  ( )\ )\     (   (()/((  (  (  ( /( ( /(  
+!  ((_)\  ))((_((_)   ))\   /(_))\ )\))( )\()))\()) 
+!   _((_)/((__  _    /((_) (_))((_((_))\((_)\(_))/  
+!  | || (_))| || |  (_))   | |  (_)(()(_| |(_| |_   
+!  | __ / -_| || |  / -_)  | |__| / _` || ' \|  _|  
+!  |_||_\___|_||_|  \___|  |____|_\__, ||_||_|\__|  
+!                                 |___/             
+𝔏𝔦𝔤𝔥𝔱 - Aguarde!!! Gerando o primeiro pack de Combos
  """
     print(ascii_art)
     
