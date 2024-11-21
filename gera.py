@@ -19,6 +19,13 @@ def gerar_senha_com_ano(nome, ano, maiuscula=True):
 
 def gerar_usuario_senha(num_usuarios=50000):
     usuarios_senhas = []
+    senhas_comuns_br = ["123456", "senha", "123456789", "12345678", "12345", "123123", "qwerty", "abc123", "654321", "123321"]
+    
+    # Adicionar o usuário nazario123 com senhas comuns
+    usuario_nazario = "nazario123"
+    for senha in senhas_comuns_br:
+        usuarios_senhas.append(f"{usuario_nazario}:{senha}")
+    
     for _ in range(num_usuarios):
         # Alternar entre nomes pt_PT e pt_BR e garantir que tenham pelo menos 6 caracteres
         while True:
@@ -30,6 +37,7 @@ def gerar_usuario_senha(num_usuarios=50000):
         usuario_com_numero = f"{nome}{numero:02d}"
         usuario_sem_numero = nome
         anos = [2022, 2023, 2024]
+
         for ano in anos:
             senha_maiuscula = gerar_senha_com_ano(nome, ano, maiuscula=True)
             senha_minuscula = gerar_senha_com_ano(nome, ano, maiuscula=False)
